@@ -32,6 +32,8 @@ let vid;
 
 let silhouetteGraphic;
 
+// Add Kinectron local address here
+let kinectron; 
 
 // TODO
 // 多人
@@ -79,7 +81,6 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(21, 8, 50);
-  // blendMode(LIGHTEST);
   silhouetteGraphic = createGraphics(windowWidth, windowHeight);
   vid = createVideo(["assets/galaxy.mp4"]);
   vid.size(width, height);
@@ -88,7 +89,33 @@ function setup() {
 
   noStroke();
 
-  
+   /////////////////
+  // Kinectron
+  // https://kinectron.github.io/#/api/windows
+  kinectron = new Kinectron("192.168.1.115")
+
+  // For Azure Kinect use "azure"
+  // kinectron.setKinectType("azure");
+  // For Kinect for Windows use "windows"
+  kinectron.setKinectType("windows");
+
+  // Connect with application over peer
+  kinectron.makeConnection();
+
+  // Set callbacks
+  // kinectron.setColorCallback(drawFeed);
+  kinectron.setDepthCallback(drawFeed);
+  // kinectron.setRawDepthCallback(drawFeed);
+  // kinectron.setTrackedBodiesCallback(drawFeed);
+  // kinectron.setBodiesCallback(drawFeed);
+  // kinectron.setInfraredCallback(drawFeed);
+  // kinectron.setLeInfraredCallback(drawFeed);
+  // kinectron.setKeyCallback(drawFeed);
+  // kinectron.setRGBDCallback(drawFeed);
+
+  // kinectron.setDepthCallback(drawFeed);
+
+  /////////////////
 
 
   SCREEN_SIZE = min(width, height);
@@ -111,6 +138,9 @@ function setup() {
   // // Hide the video element
   // video.hide();
 }
+
+function drawFeed(img) {
+  console.log(kinectron);
 
 function draw() {
   if(frameCount%10 == 0) {
